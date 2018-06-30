@@ -1,0 +1,102 @@
+var ObjectID = require('mongodb').ObjectID;
+
+module.exports = function (app, client) {
+    let db = client.db('myDatabase');
+
+    /**
+     * ACTION GET - one
+     */
+    app.get('/projects/:id', (req, res) => {
+        const id = req.params.id;
+        console.log(new ObjectID(id))
+        const details = { '_id': new ObjectID(id) };
+        db.collection('projects').findOne(details, (err, item) => {
+            if (err) {
+                res.send({ 'error': 'An error has occured' });
+            } else {
+                if (item == null) {
+                    res.send(`No registers found with the id: ${id}`);
+                } else {
+                    res.send(item);
+                }
+
+            }
+        })
+    })
+
+    /**
+     * ACTION GET - all
+     */
+    app.get('/projects', (req, res) => {
+        db.collection('projects').find({}).toArray((err, item) => {
+            if (err) {
+                res.send({ 'error': 'An error has occured' });
+            } else {
+                res.send(item);
+            }
+        })
+    })
+
+    /**
+     * ACTIONS POST
+     */
+    app.post('/projects', (req, res) => {
+        // We'll crate the project here
+        const project = { 
+            name: req.body.name, 
+            description: req.body.description,
+            volunteers: req.body.volunteers,
+            location: req.body.location
+         };
+        db.collection('projects').insert(project, (err, result) => {
+            if (err) {
+                res.send({ 'error': 'An error has occured' });
+            } else {
+                res.send(result.ops[0]);
+            }
+        });
+    })
+
+    /**
+     * ACTION PUT
+     */
+    app.put('/projects/:id', (req, res) => {
+        const id = req.params.id;
+        console.log(new ObjectID(id))
+        const details = { '_id': new ObjectID(id) };
+        const project = { 
+            name: req.body.name, 
+            description: req.body.description,
+            volunteers: req.body.volunteers,
+            location: req.body.location
+         };
+        db.collection('projects').update(details, project, (err, item) => {
+            if (err) {
+                res.send({ 'error': 'An error has occured' });
+            } else {
+                res.send(item);
+            }
+        })
+    })
+
+    /**
+     * ACTION DELETE
+     */
+    app.delete('/projects/:id', (req, res) => {
+        const id = req.params.id;
+        console.log(new ObjectID(id))
+        const details = { '_id': new ObjectID(id) };
+        db.collection('projects').remove(details, (err, item) => {
+            console.log(item.result.n)
+            if (err) {
+                res.send({ 'error': 'An error has occured' });
+            } else {
+                if (item.result.n == 0) {
+                    res.send(`No registers found with the id: ${id}`);
+                } else {
+                    res.send(`Note ${id} deleted`);
+                }
+            }
+        })
+    })
+}
