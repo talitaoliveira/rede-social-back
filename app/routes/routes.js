@@ -1,7 +1,21 @@
 var ObjectID = require('mongodb').ObjectID;
+const allowCORS = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'content-type, Content-Length, X-Requested-With, Origin, Accept');
+    res.header('Access-Control-Allow-Headers', '*');
+
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
+}
 
 module.exports = function (app, client) {
     let db = client.db('myDatabase');
+
+    app.use(allowCORS);
 
     /**
      * ACTION GET - one
