@@ -60,7 +60,9 @@ module.exports = function (app, client) {
             name: req.body.name, 
             description: req.body.description,
             volunteers: req.body.volunteers,
-            location: req.body.location
+            location: req.body.location,
+            donations: req.body.donations,
+            donations: req.body.donations
          };
         db.collection('projects').insert(project, (err, result) => {
             if (err) {
@@ -82,7 +84,7 @@ module.exports = function (app, client) {
             name: req.body.name, 
             description: req.body.description,
             volunteers: req.body.volunteers,
-            location: req.body.location
+            donations: req.body.donations
          };
         db.collection('projects').update(details, project, (err, item) => {
             if (err) {
