@@ -1,4 +1,6 @@
-var ObjectID = require('mongodb').ObjectID;
+let ObjectID = require('mongodb').ObjectID;
+
+
 const allowCORS = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -13,9 +15,16 @@ const allowCORS = (req, res, next) => {
 }
 
 module.exports = function (app, client) {
-    let db = client.db('myDatabase');
+    let db = client.db('projects');
 
     app.use(allowCORS);
+
+    /**
+     * ACTION GET
+     */
+    app.get('/', (req, res) => {
+        res.send('Ola API');
+    })
 
     /**
      * ACTION GET - one
@@ -62,7 +71,12 @@ module.exports = function (app, client) {
             volunteers: req.body.volunteers,
             location: req.body.location,
             donations: req.body.donations,
-            donations: req.body.donations
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            number: req.body.number,
+            city: req.body.city,
+            uf: req.body.uf,
          };
         db.collection('projects').insert(project, (err, result) => {
             if (err) {
