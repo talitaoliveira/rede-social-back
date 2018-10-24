@@ -65,8 +65,8 @@ module.exports = function (app, client) {
      */
     app.post('/projects', (req, res) => {
         // We'll crate the project here
-        const project = { 
-            name: req.body.name, 
+        const project = {
+            name: req.body.name,
             description: req.body.description,
             volunteers: req.body.volunteers,
             location: req.body.location,
@@ -77,7 +77,11 @@ module.exports = function (app, client) {
             number: req.body.number,
             city: req.body.city,
             uf: req.body.uf,
-         };
+            image: req.body.image,
+            instagram: req.body.instagram,
+            facebook: req.body.facebook,
+            website: req.body.website,
+        };
         db.collection('projects').insert(project, (err, result) => {
             if (err) {
                 res.send({ 'error': 'An error has occured' });
@@ -94,12 +98,12 @@ module.exports = function (app, client) {
         const id = req.params.id;
         console.log(new ObjectID(id))
         const details = { '_id': new ObjectID(id) };
-        const project = { 
-            name: req.body.name, 
+        const project = {
+            name: req.body.name,
             description: req.body.description,
             volunteers: req.body.volunteers,
             donations: req.body.donations
-         };
+        };
         db.collection('projects').update(details, project, (err, item) => {
             if (err) {
                 res.send({ 'error': 'An error has occured' });
